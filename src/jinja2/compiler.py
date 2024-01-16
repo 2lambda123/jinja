@@ -41,6 +41,16 @@ operators = {
 
 
 def optimizeconst(f: F) -> F:
+    def new_func(self: "CodeGenerator", node: nodes.Expr, frame: "Frame", **kwargs: t.Any) -> t.Any:
+        # Only optimize if the frame is not volatile and the optimizer is available
+        if self.optimizer and not frame.eval_ctx.volatile:
+            new_node = self.optimizer.visit(node, frame.eval_ctx)
+
+            if new_node != node:
+                return self.visit(new_node, frame)
+        return f(self, node, frame, **kwargs)
+
+    return update_wrapper(t.cast(F, new_func), f)
     def new_func(
         self: "CodeGenerator", node: nodes.Expr, frame: "Frame", **kwargs: t.Any
     ) -> t.Any:
