@@ -1,5 +1,6 @@
 """Compiles nodes from the parser into Python code."""
 import typing as t
+from typing import Union, Tuple, List, Set, FrozenSet, Dict
 from contextlib import contextmanager
 from functools import update_wrapper
 from io import StringIO
@@ -132,7 +133,7 @@ def generate(node: nodes.Template, environment: "Environment", name: Optional[st
     return None
 
 
-def has_safe_repr(value: t.Any) -> bool:
+def has_safe_repr(value: Union[None, bool, int, float, complex, range, str, Markup, Tuple, List, Set, FrozenSet, Dict]) -> bool:
     """Does the node have a safe representation?"""
     if value is None or value is NotImplemented or value is Ellipsis:
         return True
