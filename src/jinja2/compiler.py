@@ -167,6 +167,11 @@ def find_undeclared(
 
 class MacroRef:
     def __init__(self, node: t.Union[nodes.Macro, nodes.CallBlock]) -> None:
+        self.node: t.Union[nodes.Macro, nodes.CallBlock] = node
+        self.accesses_caller: bool = False
+        self.accesses_kwargs: bool = False
+        self.accesses_varargs: bool = False
+    def __init__(self, node: t.Union[nodes.Macro, nodes.CallBlock]) -> None:
         self.node = node
         self.accesses_caller = False
         self.accesses_kwargs = False
