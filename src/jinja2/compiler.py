@@ -108,7 +108,7 @@ def _make_unop(
     return visitor
 
 
-def generate(
+def generate(node: nodes.Template, environment: "Environment", name: Optional[str], filename: Optional[str], stream: Optional[TextIO] = None, defer_init: bool = False, optimized: bool = True,
     node: nodes.Template,
     environment: "Environment",
     name: t.Optional[str],
