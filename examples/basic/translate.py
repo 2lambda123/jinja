@@ -1,6 +1,6 @@
 from jinja2 import Environment
 
-env = Environment(extensions=["jinja2.ext.i18n"])
+env = Environment(extensions=["jinja2.ext.i18n"], autoescape=True)
 env.globals["gettext"] = {"Hello %(user)s!": "Hallo %(user)s!"}.__getitem__
 env.globals["ngettext"] = lambda s, p, n: {
     "%(count)s user": "%(count)d Benutzer",
