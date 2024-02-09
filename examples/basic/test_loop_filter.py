@@ -1,6 +1,6 @@
 from jinja2 import Environment
 
-tmpl = Environment().from_string(
+tmpl = Environment(autoescape=True).from_string(
     """\
 <ul>
 {%- for item in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] if item % 2 == 0 %}

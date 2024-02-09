@@ -8,6 +8,6 @@ env = Environment(
             "b": "{% extends 'a' %}{% block body %}[B]{% endblock %}",
             "c": "{% extends 'b' %}{% block body %}###{{ super() }}###{% endblock %}",
         }
-    )
-)
+    ), 
+autoescape=True)
 print(env.get_template("c").render())
