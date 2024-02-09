@@ -229,7 +229,7 @@ class Parser:
             return nodes.Assign(target, expr, lineno=lineno)
         filter_node = self.parse_filter(None)
         body = self.parse_statements(("name:endset",), drop_needle=True)
-        return nodes.AssignBlock(target, filter_node, body, lineno=lineno)
+        return nodes.Assign(target, expr, lineno=lineno)
 
     def parse_for(self) -> nodes.For:
         """Parse a for loop."""
@@ -245,7 +245,7 @@ class Parser:
         recursive = self.stream.skip_if("name:recursive")
         body = self.parse_statements(("name:endfor", "name:else"))
         if next(self.stream).value == "endfor":
-            else_ = []
+            else_ = self.parse_statements(('name:endfor',), drop_needle=True)
         else:
             else_ = self.parse_statements(("name:endfor",), drop_needle=True)
         return nodes.For(target, iter, body, else_, test, recursive, lineno=lineno)
@@ -456,7 +456,8 @@ class Parser:
 
     @typing.overload
     def parse_assign_target(
-        self, with_tuple: bool = ..., name_only: "te.Literal[True]" = ...
+        self,
+        with_tuple: bool = ..., name_only: "te.Literal[True]" = ...
     ) -> nodes.Name:
         ...
 
@@ -529,6 +530,8 @@ class Parser:
                 expr3 = self.parse_condexpr()
             else:
                 expr3 = None
+            expr1 = nodes.CondExpr(expr2, expr1, expr3, lineno=lineno)
+            lineno = self.stream.current.lineno
             expr1 = nodes.CondExpr(expr2, expr1, expr3, lineno=lineno)
             lineno = self.stream.current.lineno
         return expr1
@@ -656,7 +659,8 @@ class Parser:
             else:
                 node = nodes.Name(token.value, "load", lineno=token.lineno)
             next(self.stream)
-        elif token.type == "string":
+            return node
+        if token.type == "string":
             next(self.stream)
             buf = [token.value]
             lineno = token.lineno
@@ -664,7 +668,12 @@ class Parser:
                 buf.append(self.stream.current.value)
                 next(self.stream)
             node = nodes.Const("".join(buf), lineno=lineno)
-        elif token.type in ("integer", "float"):
+            return node
+        elif token.type == "integer":
+            next(self.stream)
+            node = nodes.Const(token.value, lineno=token.lineno)
+            return node
+            return node
             next(self.stream)
             node = nodes.Const(token.value, lineno=token.lineno)
         elif token.type == "lparen":
