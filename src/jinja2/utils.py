@@ -80,6 +80,17 @@ class _PassArg(enum.Enum):
     @classmethod
     def from_obj(cls, obj: F) -> t.Optional["_PassArg"]:
         if hasattr(obj, "jinja_pass_arg"):
+        """"Returns the jinja_pass_arg attribute from the given object if it exists, otherwise returns None."
+        Parameters:
+            - cls (type): The class to which the object belongs.
+            - obj (F): The object from which to retrieve the jinja_pass_arg attribute.
+        Returns:
+            - _PassArg: The jinja_pass_arg attribute from the given object, if it exists.
+        Processing Logic:
+            - Check if the given object has the jinja_pass_arg attribute.
+            - If it does, return the attribute.
+            - If it doesn't, return None."""
+        
             return obj.jinja_pass_arg  # type: ignore
 
         return None
@@ -425,12 +436,16 @@ class LRUCache:
     # won't do any harm.
 
     def __init__(self, capacity: int) -> None:
+        """"""
+        
         self.capacity = capacity
         self._mapping: t.Dict[t.Any, t.Any] = {}
         self._queue: "te.Deque[t.Any]" = deque()
         self._postinit()
 
     def _postinit(self) -> None:
+        """"""
+        
         # alias all queue methods for faster lookup
         self._popleft = self._queue.popleft
         self._pop = self._queue.pop
@@ -439,6 +454,8 @@ class LRUCache:
         self._append = self._queue.append
 
     def __getstate__(self) -> t.Mapping[str, t.Any]:
+        """"""
+        
         return {
             "capacity": self.capacity,
             "_mapping": self._mapping,
@@ -446,11 +463,15 @@ class LRUCache:
         }
 
     def __setstate__(self, d: t.Mapping[str, t.Any]) -> None:
+        """"""
+        
         self.__dict__.update(d)
         self._postinit()
 
     def __getnewargs__(
         self,
+        """"""
+        
     ) -> t.Tuple[int,]:
         return (self.capacity,)
 
@@ -493,6 +514,8 @@ class LRUCache:
         return len(self._mapping)
 
     def __repr__(self) -> str:
+        """"""
+        
         return f"<{type(self).__name__} {self._mapping!r}>"
 
     def __getitem__(self, key: t.Any) -> t.Any:
@@ -557,6 +580,8 @@ class LRUCache:
         return list(self)
 
     def __iter__(self) -> t.Iterator[t.Any]:
+        """"""
+        
         return reversed(tuple(self._queue))
 
     def __reversed__(self) -> t.Iterator[t.Any]:
@@ -691,6 +716,8 @@ class Cycler:
     """
 
     def __init__(self, *items: t.Any) -> None:
+        """"""
+        
         if not items:
             raise RuntimeError("at least one item has to be provided")
         self.items = items
@@ -722,10 +749,14 @@ class Joiner:
     """A joining helper for templates."""
 
     def __init__(self, sep: str = ", ") -> None:
+        """"""
+        
         self.sep = sep
         self.used = False
 
     def __call__(self) -> str:
+        """"""
+        
         if not self.used:
             self.used = True
             return ""
@@ -737,10 +768,14 @@ class Namespace:
     initialized from a dictionary or with keyword arguments."""
 
     def __init__(*args: t.Any, **kwargs: t.Any) -> None:  # noqa: B902
+        """"""
+        
         self, args = args[0], args[1:]
         self.__attrs = dict(*args, **kwargs)
 
     def __getattribute__(self, name: str) -> t.Any:
+        """"""
+        
         # __class__ is needed for the awaitable check in async mode
         if name in {"_Namespace__attrs", "__class__"}:
             return object.__getattribute__(self, name)
@@ -750,7 +785,11 @@ class Namespace:
             raise AttributeError(name) from None
 
     def __setitem__(self, name: str, value: t.Any) -> None:
+        """"""
+        
         self.__attrs[name] = value
 
     def __repr__(self) -> str:
+        """"""
+        
         return f"<Namespace {self.__attrs!r}>"
