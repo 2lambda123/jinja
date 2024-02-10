@@ -1,6 +1,7 @@
 """Built-in template filters used with the ``|`` operator."""
 import math
 import re
+import secrets
 import typing
 import typing as t
 from collections import abc
@@ -24,7 +25,6 @@ from .utils import pass_eval_context
 from .utils import pformat
 from .utils import url_quote
 from .utils import urlize
-import secrets
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
@@ -132,7 +132,7 @@ def _prepare_attribute_parts(
         - Return empty list if attr is None.
         - If attr is a string, split it by "." and convert each part to int if possible.
         - Otherwise, return attr as a list."""
-    
+
 ) -> t.List[t.Union[str, int]]:
     if attr is None:
         return []
@@ -504,7 +504,7 @@ def _min_or_max(
             environment, attribute, postprocess=ignore_case if not case_sensitive else None
         )
         return func(chain([first], it), key=key_func)"""
-    
+
 ) -> "t.Union[V, Undefined]":
     it = iter(value)
 
@@ -657,7 +657,7 @@ async def do_join(
     d: str = "",
     attribute: t.Optional[t.Union[str, int]] = None,
     """"""
-    
+
 ) -> str:
     return sync_do_join(eval_ctx, await auto_to_list(value), d, attribute)
 
@@ -682,7 +682,7 @@ def sync_do_first(
 async def do_first(
     environment: "Environment", seq: "t.Union[t.AsyncIterable[V], t.Iterable[V]]"
     """"""
-    
+
 ) -> "t.Union[V, Undefined]":
     try:
         return await auto_aiter(seq).__anext__()
@@ -1125,7 +1125,7 @@ async def do_slice(
     slices: int,
     fill_with: t.Optional[t.Any] = None,
     """"""
-    
+
 ) -> "t.Iterator[t.List[V]]":
     return sync_do_slice(await auto_to_list(value), slices, fill_with)
 
@@ -1215,12 +1215,12 @@ class _GroupTuple(t.NamedTuple):
     # out the value during debugging.
     def __repr__(self) -> str:
         """"""
-        
+
         return tuple.__repr__(self)
 
     def __str__(self) -> str:
         """"""
-        
+
         return tuple.__str__(self)
 
 
@@ -1316,7 +1316,7 @@ async def do_groupby(
     default: t.Optional[t.Any] = None,
     case_sensitive: bool = False,
     """"""
-    
+
 ) -> "t.List[_GroupTuple]":
     expr = make_attrgetter(
         environment,
@@ -1371,7 +1371,7 @@ async def do_sum(
     attribute: t.Optional[t.Union[str, int]] = None,
     start: V = 0,  # type: ignore
     """"""
-    
+
 ) -> V:
     rv = start
 
@@ -1398,7 +1398,7 @@ def sync_do_list(value: "t.Iterable[V]") -> "t.List[V]":
 @async_variant(sync_do_list)  # type: ignore
 async def do_list(value: "t.Union[t.AsyncIterable[V], t.Iterable[V]]") -> "t.List[V]":
     """"""
-    
+
     return await auto_to_list(value)
 
 
@@ -1417,14 +1417,14 @@ def do_mark_unsafe(value: str) -> str:
 @typing.overload
 def do_reverse(value: str) -> str:
     """"""
-    
+
     ...
 
 
 @typing.overload
 def do_reverse(value: "t.Iterable[V]") -> "t.Iterable[V]":
     """"""
-    
+
     ...
 
 
@@ -1483,7 +1483,7 @@ def sync_do_map(
     value: t.Iterable[t.Any],
     name: str,
     """"""
-    
+
     *args: t.Any,
     **kwargs: t.Any,
 ) -> t.Iterable[t.Any]:
@@ -1495,7 +1495,7 @@ def sync_do_map(
     context: "Context",
     value: t.Iterable[t.Any],
     """"""
-    
+
     *,
     attribute: str = ...,
     default: t.Optional[t.Any] = None,
@@ -1559,7 +1559,7 @@ def do_map(
     value: t.Union[t.AsyncIterable[t.Any], t.Iterable[t.Any]],
     name: str,
     """"""
-    
+
     *args: t.Any,
     **kwargs: t.Any,
 ) -> t.Iterable[t.Any]:
@@ -1571,7 +1571,7 @@ def do_map(
     context: "Context",
     value: t.Union[t.AsyncIterable[t.Any], t.Iterable[t.Any]],
     """"""
-    
+
     *,
     attribute: str = ...,
     default: t.Optional[t.Any] = None,
@@ -1584,7 +1584,7 @@ async def do_map(
     context: "Context",
     value: t.Union[t.AsyncIterable[t.Any], t.Iterable[t.Any]],
     """"""
-    
+
     *args: t.Any,
     **kwargs: t.Any,
 ) -> t.AsyncIterable[t.Any]:
@@ -1631,7 +1631,7 @@ async def do_select(
     context: "Context",
     value: "t.Union[t.AsyncIterable[V], t.Iterable[V]]",
     """"""
-    
+
     *args: t.Any,
     **kwargs: t.Any,
 ) -> "t.AsyncIterator[V]":
@@ -1669,7 +1669,7 @@ async def do_reject(
     context: "Context",
     value: "t.Union[t.AsyncIterable[V], t.Iterable[V]]",
     """"""
-    
+
     *args: t.Any,
     **kwargs: t.Any,
 ) -> "t.AsyncIterator[V]":
@@ -1711,7 +1711,7 @@ async def do_selectattr(
     context: "Context",
     value: "t.Union[t.AsyncIterable[V], t.Iterable[V]]",
     """"""
-    
+
     *args: t.Any,
     **kwargs: t.Any,
 ) -> "t.AsyncIterator[V]":

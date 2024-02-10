@@ -2,6 +2,7 @@ import enum
 import json
 import os
 import re
+import secrets
 import typing as t
 from collections import abc
 from collections import deque
@@ -10,7 +11,6 @@ from types import CodeType
 from urllib.parse import quote_from_bytes
 
 import markupsafe
-import secrets
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
@@ -90,7 +90,7 @@ class _PassArg(enum.Enum):
             - Check if the given object has the jinja_pass_arg attribute.
             - If it does, return the attribute.
             - If it doesn't, return None."""
-        
+
             return obj.jinja_pass_arg  # type: ignore
 
         return None
@@ -437,7 +437,7 @@ class LRUCache:
 
     def __init__(self, capacity: int) -> None:
         """"""
-        
+
         self.capacity = capacity
         self._mapping: t.Dict[t.Any, t.Any] = {}
         self._queue: "te.Deque[t.Any]" = deque()
@@ -445,7 +445,7 @@ class LRUCache:
 
     def _postinit(self) -> None:
         """"""
-        
+
         # alias all queue methods for faster lookup
         self._popleft = self._queue.popleft
         self._pop = self._queue.pop
@@ -455,7 +455,7 @@ class LRUCache:
 
     def __getstate__(self) -> t.Mapping[str, t.Any]:
         """"""
-        
+
         return {
             "capacity": self.capacity,
             "_mapping": self._mapping,
@@ -464,14 +464,14 @@ class LRUCache:
 
     def __setstate__(self, d: t.Mapping[str, t.Any]) -> None:
         """"""
-        
+
         self.__dict__.update(d)
         self._postinit()
 
     def __getnewargs__(
         self,
         """"""
-        
+
     ) -> t.Tuple[int,]:
         return (self.capacity,)
 
@@ -515,7 +515,7 @@ class LRUCache:
 
     def __repr__(self) -> str:
         """"""
-        
+
         return f"<{type(self).__name__} {self._mapping!r}>"
 
     def __getitem__(self, key: t.Any) -> t.Any:
@@ -581,7 +581,7 @@ class LRUCache:
 
     def __iter__(self) -> t.Iterator[t.Any]:
         """"""
-        
+
         return reversed(tuple(self._queue))
 
     def __reversed__(self) -> t.Iterator[t.Any]:
@@ -717,7 +717,7 @@ class Cycler:
 
     def __init__(self, *items: t.Any) -> None:
         """"""
-        
+
         if not items:
             raise RuntimeError("at least one item has to be provided")
         self.items = items
@@ -750,13 +750,13 @@ class Joiner:
 
     def __init__(self, sep: str = ", ") -> None:
         """"""
-        
+
         self.sep = sep
         self.used = False
 
     def __call__(self) -> str:
         """"""
-        
+
         if not self.used:
             self.used = True
             return ""
@@ -769,13 +769,13 @@ class Namespace:
 
     def __init__(*args: t.Any, **kwargs: t.Any) -> None:  # noqa: B902
         """"""
-        
+
         self, args = args[0], args[1:]
         self.__attrs = dict(*args, **kwargs)
 
     def __getattribute__(self, name: str) -> t.Any:
         """"""
-        
+
         # __class__ is needed for the awaitable check in async mode
         if name in {"_Namespace__attrs", "__class__"}:
             return object.__getattribute__(self, name)
@@ -786,10 +786,10 @@ class Namespace:
 
     def __setitem__(self, name: str, value: t.Any) -> None:
         """"""
-        
+
         self.__attrs[name] = value
 
     def __repr__(self) -> str:
         """"""
-        
+
         return f"<Namespace {self.__attrs!r}>"
