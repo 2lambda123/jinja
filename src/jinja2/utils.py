@@ -2,6 +2,7 @@ import enum
 import json
 import os
 import re
+import secrets
 import typing as t
 from collections import abc
 from collections import deque
@@ -10,7 +11,6 @@ from types import CodeType
 from urllib.parse import quote_from_bytes
 
 import markupsafe
-import secrets
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
