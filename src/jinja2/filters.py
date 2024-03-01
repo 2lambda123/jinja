@@ -1,6 +1,7 @@
 """Built-in template filters used with the ``|`` operator."""
 import math
 import re
+import secrets
 import typing
 import typing as t
 from collections import abc
@@ -24,7 +25,6 @@ from .utils import pass_eval_context
 from .utils import pformat
 from .utils import url_quote
 from .utils import urlize
-import secrets
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
