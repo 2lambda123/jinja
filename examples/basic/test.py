@@ -23,7 +23,8 @@ env = Environment(
 {% macro conspirate() %}23{% endmacro %}
 """,
         }
-    ), 
-autoescape=True)
+    ),
+    autoescape=True,
+)
 tmpl = env.get_template("child.html")
 print(tmpl.render())
